@@ -4,20 +4,27 @@
 const fs = require('fs');
 const axios = require('axios');
 const { MarkovMachine } = require('./markov.js')
+
  
 // get command line inputs
 const inputType = process.argv[process.argv.length-2]; // file or URL
 const input = process.argv[process.argv.length-1]; // file name or URL
 
-if (inputType === "url"){
-  processUrl(input);
-} 
 
-if (inputType === "file"){
-  processText(input);
-} 
+function processInput(inputType, input){
+    if (inputType === "url"){
+        processUrl(input);
+    } 
 
-/* Given file path, obtain file contents, create Markov Machine, and gen random text */
+    if (inputType === "file"){
+        processText(input);
+    } 
+}
+
+/** Given file path
+ * - obtain file contents, 
+ * - create Markov Machine, and 
+ * - generate random text */
 function processText(filePath){
     fs.readFile(filePath, 'utf8', function(err, data){
         if (err){
@@ -31,7 +38,10 @@ function processText(filePath){
 
 }
 
-/* Given URL, obtain webpage contents, create Markov Machine, and gen random text */
+/** Given URL
+ * - obtain webpage contents, 
+ * - create Markov Machine, and 
+ * - generate random text */
 function processUrl(inputUrl){ 
     axios
         .get(inputUrl)
@@ -48,3 +58,12 @@ function processUrl(inputUrl){
 
 
 
+module.exports = {
+    processInput : processInput,
+    processText : processText,
+    processUrl : processUrl,
+    fs : fs,
+    axios : axios,
+    inputType : inputType,
+    input : input
+  };
